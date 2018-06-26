@@ -460,6 +460,15 @@ int main(int argc, char *argv[]) {
         CFG_CUSTOM_SEP_BLOCK_WIDTH_OPT,
         CFG_END()};
 
+    cfg_opt_t fan_opts[] = {
+        CFG_STR("format", "%rpm rpm", CFGF_NONE),
+        CFG_STR("path", NULL, CFGF_NONE),
+        CFG_INT("min_threshold", 500, CFGF_NONE),
+        CFG_CUSTOM_ALIGN_OPT,
+        CFG_CUSTOM_COLOR_OPTS,
+        CFG_CUSTOM_MIN_WIDTH_OPT,
+        CFG_END()};
+
     cfg_opt_t disk_opts[] = {
         CFG_STR("format", "%free", CFGF_NONE),
         CFG_STR("format_below_threshold", NULL, CFGF_NONE),
@@ -496,6 +505,7 @@ int main(int argc, char *argv[]) {
         CFG_SEC("ethernet", ethernet_opts, CFGF_TITLE | CFGF_MULTI),
         CFG_SEC("battery", battery_opts, CFGF_TITLE | CFGF_MULTI),
         CFG_SEC("cpu_temperature", temp_opts, CFGF_TITLE | CFGF_MULTI),
+	CFG_SEC("cpu_fan", fan_opts, CFGF_TITLE | CFGF_MULTI),
         CFG_SEC("disk", disk_opts, CFGF_TITLE | CFGF_MULTI),
         CFG_SEC("volume", volume_opts, CFGF_TITLE | CFGF_MULTI),
         CFG_SEC("ipv6", ipv6_opts, CFGF_NONE),
@@ -775,6 +785,12 @@ int main(int argc, char *argv[]) {
             CASE_SEC_TITLE("cpu_temperature") {
                 SEC_OPEN_MAP("cpu_temperature");
                 print_cpu_temperature_info(json_gen, buffer, atoi(title), cfg_getstr(sec, "path"), cfg_getstr(sec, "format"), cfg_getstr(sec, "format_above_threshold"), cfg_getint(sec, "max_threshold"));
+                SEC_CLOSE_MAP;
+            }
+
+            CASE_SEC_TITLE("cpu_fan") {
+                SEC_OPEN_MAP("cpu_fan");
+                print_cpu_fan_info(json_gen, buffer, atoi(title), cfg_getstr(sec, "path"), cfg_getstr(sec, "format"), cfg_getint(sec, "min_threshold"));
                 SEC_CLOSE_MAP;
             }
 
