@@ -76,7 +76,7 @@ void print_cpu_fan_info(yajl_gen json_gen, char *buffer, int zone, const char *p
                 goto error;
             temp = strtol(buf, NULL, 10);
             if (temp == LONG_MIN || temp == LONG_MAX || temp <= 0)
-                *(outwalk++) = '?';
+                *(outwalk++) = '0';
             else {
                 if ((temp) <= min_threshold) {
                     START_COLOR("color_bad");
